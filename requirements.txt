@@ -1,6 +1,6 @@
-flask
-numpy
-pandas
-twilio
+Flask
 gunicorn
 xgboost
+pandas
+numpy
+scikit-learn
