@@ -3,3 +3,4 @@ numpy
 pandas
 twilio
 gunicorn
+xgboost
