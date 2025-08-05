@@ -1,6 +1,8 @@
 Flask
 gunicorn
+scikit-learn
 xgboost
 pandas
 numpy
-scikit-learn
+twilio
+google-generativeai
