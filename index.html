@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SolarEco - Harness the Power of the Sun</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    #chatMessages {
+      scrollbar-width: thin;
+      scrollbar-color: #3b82f6 #f1f1f1;
+    }
+    
+    #chatMessages::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    #chatMessages::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    #chatMessages::-webkit-scrollbar-thumb {
+      background-color: #3b82f6;
+      border-radius: 6px;
+    }
+    
+    .dark #chatMessages::-webkit-scrollbar-track {
+      background: #374151;
+    }
+    
+    .dark #chatMessages::-webkit-scrollbar-thumb {
+      background-color: #1e40af;
+    }
+
+
+
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+  <header class="bg-gray-800 text-white shadow-md">
+    <div class="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center">
+      <a href="#" class="text-2xl font-bold mb-4 md:mb-0">Solar<span class="text-yellow-400">Eco</span></a>
+      <nav class="flex items-center space-x-1 md:space-x-6">
+        <a href="#" class="nav-link hover:text-yellow-400 transition">Home</a>
+        <a href="#contact" class="nav-link hover:text-yellow-400 transition">Contact</a>
+
+        <div class="flex items-center ml-4 space-x-2">
+          <span id="userGreeting" class="hidden bg-green-600 text-white px-4 py-2 rounded-md font-medium transition cursor-pointer hover:bg-green-700"></span>
+          <div id="authBtn"></div>
+
+          <button id="modeToggle" class="p-2 rounded-full hover:bg-gray-700 transition">
+            <i id="modeIcon" class="fas fa-moon"></i>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero-section bg-gray-900 text-white">
+    <div class="container mx-auto px-4 py-20 md:py-32 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">Power Your Home With Solar Energy</h1>
+      <p class="text-xl md:text-2xl max-w-3xl mx-auto">Join the renewable energy revolution and save up to 70% on your electricity bills</p>
+    </div>
+  </section>
+
+  <section class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center justify-center">
+      <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Solar panels on roof" class="rounded-lg shadow-md w-full h-48 object-cover dark:brightness-90" />
+      <img src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Solar farm" class="rounded-lg shadow-md w-full h-48 object-cover dark:brightness-90" />
+      <img src="https://images.unsplash.com/photo-1613665813446-82a78c468a1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Solar panel installation" class="rounded-lg shadow-md w-full h-48 object-cover dark:brightness-90" />
+    </div>
+  </section>
+
+  <section class="py-12 container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-8">💰 Solar Savings Calculator</h2>
+    <div class="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto dark:bg-gray-800 dark:text-white">
+      <form id="solarCalculatorForm" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="electricityRate" class="block mb-1">Electricity Rate (₹/kWh)</label>
+            <input type="number" id="electricityRate" step="any" required placeholder="e.g. 8.0" class="w-full px-4 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
+          </div>
+          <div>
+            <label for="sunlightHours" class="block mb-1">Avg Sunlight Hours/Day</label>
+            <input type="number" id="sunlightHours" step="any" required placeholder="e.g. 5.0" class="w-full px-4 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
+          </div>
+          <div>
+            <label for="panelCapacity" class="block mb-1">Solar Panel Capacity (kW)</label>
+            <input type="number" id="panelCapacity" step="any" required placeholder="e.g. 3.0" class="w-full px-4 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
+          </div>
+          <div>
+            <label for="dailyConsumption" class="block mb-1">Daily Electricity Consumption (kWh)</label>
+            <input type="number" id="dailyConsumption" step="any" required placeholder="e.g. 10.0" class="w-full px-4 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 dark:focus:border-blue-600" />
+          </div>
+        </div>
+
+        <div id="outputBox" class="border-l-4 border-blue-500 bg-blue-50 dark:bg-gray-700 dark:border-blue-400 rounded-md p-4 space-y-3 shadow-md mt-4 text-sm md:text-base hidden">
+          <p><strong class="text-blue-800 dark:text-blue-300">🔋 Daily Solar Output:</strong> <span id="solarOutput" class="font-semibold text-gray-900 dark:text-white"></span> kWh</p>
+          <p><strong class="text-blue-800 dark:text-blue-300">💸 Daily Savings:</strong> ₹<span id="dailySavings" class="font-semibold text-gray-900 dark:text-white"></span></p>
+          <p><strong class="text-blue-800 dark:text-blue-300">🌞 Monthly Savings:</strong> ₹<span id="monthlySavings" class="font-semibold text-gray-900 dark:text-white"></span></p>
+          <p><strong class="text-blue-800 dark:text-blue-300">📅 Yearly Savings:</strong> ₹<span id="yearlySavings" class="font-semibold text-gray-900 dark:text-white"></span></p>
+        </div>
+
+        <button type="button" onclick="calculateSolarSavings()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">⚡ Estimate Savings</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="features" class="py-16 container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="feature-card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <i class="fas fa-solar-panel text-5xl mb-4 text-blue-600 dark:text-blue-400"></i>
+        <h3 class="text-2xl font-bold mb-3">Panel Recommendation</h3>
+        <p class="mb-4 dark:text-gray-300">Get personalized solar panel recommendations based on your needs.</p> <br>
+        <a href="/recommendation" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition">Get Recommendations</a>
+      </div>
+  
+      <div class="feature-card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <i class="fas fa-chart-line text-5xl mb-4 text-blue-600 dark:text-blue-400"></i>
+        <h3 class="text-2xl font-bold mb-3">Efficiency Analysis</h3>
+        <p class="mb-4 dark:text-gray-300">Analyze your energy usage and potential solar savings.</p> <br>
+        <a href="/efficiency" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition">Analyze Now</a>
+      </div>
+  
+      <div class="feature-card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition">
+        <i class="fas fa-sun text-5xl mb-4 text-blue-600 dark:text-blue-400"></i>
+        <h3 class="text-2xl font-bold mb-3">Subsidy Info</h3>
+        <p class="mb-4 dark:text-gray-300">Get the best option on Subsidies.</p> <br> <br>
+        <a href="/subsidy" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition">Get Subsidy info</a>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact" class="bg-gray-800 text-white mt-2">
+    <div class="container mx-auto px-4 text-center">
+      <p class="mb-2">&copy; 2023 SolarEco. All rights reserved.</p>
+      <p>Contact us: vanshgujral175@gmail.com | +91 8077439345</p>
+    </div>
+  </footer>
+
+  <div id="chatbotContainer" class="fixed bottom-8 right-8 z-50">
+    <div id="chatbotButton" class="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center cursor-pointer shadow-lg hover:bg-blue-700 transition">
+      <i class="fas fa-comment-dots text-2xl"></i>
+    </div>
+
+    <div id="chatbotWindow" class="hidden w-80 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-xl border dark:border-gray-700 flex flex-col absolute bottom-20 right-0">
+      <div class="bg-blue-600 text-white px-4 py-3 rounded-t-lg flex justify-between items-center">
+        <h3 class="font-semibold">SolarEco Assistant</h3>
+        <button id="closeChatbot" class="text-white hover:text-gray-200">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div id="chatMessages" class="flex-1 p-4 overflow-y-auto">
+        <div class="text-center text-gray-500 dark:text-gray-400 py-8">
+          <i class="fas fa-robot text-4xl mb-2"></i>
+          <p>How can I help you with solar energy today?</p>
+        </div>
+      </div>
+
+      <div class="p-4 border-t dark:border-gray-700">
+        <div class="flex">
+          <input type="text" id="chatInput" placeholder="Type your message..." class="flex-1 px-3 py-2 border rounded-l-md dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600">
+          <button id="sendMessage" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dark mode functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const modeToggle = document.getElementById('modeToggle');
+      const modeIcon = document.getElementById('modeIcon');
+      const html = document.documentElement;
+      
+      // Check for saved user preference or use system preference
+      const savedMode = localStorage.getItem('darkMode');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      // Set initial mode
+      if (savedMode === 'dark' || (!savedMode && systemPrefersDark)) {
+        html.classList.add('dark');
+        modeIcon.classList.replace('fa-moon', 'fa-sun');
+        localStorage.setItem('darkMode', 'dark');
+      } else {
+        html.classList.remove('dark');
+        modeIcon.classList.replace('fa-sun', 'fa-moon');
+        localStorage.setItem('darkMode', 'light');
+      }
+      
+      // Toggle functionality
+      modeToggle.addEventListener('click', () => {
+        if (html.classList.contains('dark')) {
+          html.classList.remove('dark');
+          modeIcon.classList.replace('fa-sun', 'fa-moon');
+          localStorage.setItem('darkMode', 'light');
+        } else {
+          html.classList.add('dark');
+          modeIcon.classList.replace('fa-moon', 'fa-sun');
+          localStorage.setItem('darkMode', 'dark');
+        }
+      });
+    });
+
+    // Solar calculator function
+    function calculateSolarSavings() {
+      const rate = parseFloat(document.getElementById('electricityRate').value);
+      const sunlight = parseFloat(document.getElementById('sunlightHours').value);
+      const panel = parseFloat(document.getElementById('panelCapacity').value);
+      const consumption = parseFloat(document.getElementById('dailyConsumption').value);
+
+      if ([rate, sunlight, panel, consumption].some(isNaN)) {
+        alert("Please enter all values correctly.");
+        return;
+      }
+
+      const dailyOutput = panel * sunlight;
+      const dailySavings = Math.min(consumption, dailyOutput) * rate;
+      const monthlySavings = dailySavings * 30;
+      const yearlySavings = monthlySavings * 12;
+
+      document.getElementById('solarOutput').innerText = dailyOutput.toFixed(2);
+      document.getElementById('dailySavings').innerText = dailySavings.toFixed(2);
+      document.getElementById('monthlySavings').innerText = monthlySavings.toFixed(2);
+      document.getElementById('yearlySavings').innerText = yearlySavings.toFixed(2);
+      document.getElementById('outputBox').classList.remove('hidden');
+    }
+
+    // User greeting functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = localStorage.getItem('userEmail');
+      const greeting = document.getElementById('userGreeting');
+
+      if (user && greeting) {
+        const username = user.split('@')[0];
+        greeting.textContent = `Hi, ${username}`;
+      } else if (greeting) {
+        greeting.innerHTML = `<a href="login.html" class="text-white hover:text-gray-200">Login</a>`;
+      }
+    });
+
+    // Chatbot functionality
+    document.addEventListener("DOMContentLoaded", function() {
+  const chatbotButton = document.getElementById("chatbotButton");
+  const chatbotWindow = document.getElementById("chatbotWindow");
+  const closeChatbot = document.getElementById("closeChatbot");
+  const chatMessages = document.getElementById("chatMessages");
+  const chatInput = document.getElementById("chatInput");
+  const sendButton = document.getElementById("sendMessage");
+  
+  // Increase the size of the chatbot window
+  chatbotWindow.style.width = "350px"; // Increased from default
+  chatbotWindow.style.height = "500px"; // Increased height
+  chatMessages.style.height = "300px"; // Ensure enough space for messages
+  
+  // Add loading indicator
+  const loadingIndicator = document.createElement("div");
+  loadingIndicator.className = "loading-indicator hidden";
+  loadingIndicator.innerHTML = `
+    <div class="dot-pulse">
+      <div class="dot-pulse__dot"></div>
+      <div class="dot-pulse__dot"></div>
+      <div class="dot-pulse__dot"></div>
+    </div>
+  `;
+  chatbotWindow.appendChild(loadingIndicator);
+  
+  // Create and add suggested questions with toggle option
+  const suggestedQuestions = document.createElement("div");
+  suggestedQuestions.className = "suggested-questions p-3 border-t border-gray-200 dark:border-gray-700";
+  
+  // Add a toggle button for suggestions
+  suggestedQuestions.innerHTML = `
+    <div class="flex justify-between items-center mb-2">
+      <p class="text-sm text-gray-500">Suggested Questions:</p>
+      <button id="toggleSuggestions" class="text-xs text-blue-500 hover:text-blue-700">
+        <span class="minimize-text">Minimize</span>
+        <span class="expand-text hidden">Expand</span>
+      </button>
+    </div>
+    <div id="suggestionsContainer" class="flex flex-wrap gap-2">
+      <button class="suggestion-btn px-2 py-1 text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full hover:bg-green-200 dark:hover:bg-green-800 transition-colors">What are solar panels?</button>
+      <button class="suggestion-btn px-2 py-1 text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full hover:bg-green-200 dark:hover:bg-green-800 transition-colors">How efficient are solar panels?</button>
+      <button class="suggestion-btn px-2 py-1 text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full hover:bg-green-200 dark:hover:bg-green-800 transition-colors">Types of solar panels</button>
+      <button class="suggestion-btn px-2 py-1 text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full hover:bg-green-200 dark:hover:bg-green-800 transition-colors">Solar panel installation</button>
+    </div>
+  `;
+  
+  chatbotWindow.insertBefore(suggestedQuestions, document.querySelector(".chat-input-container"));
+  
+  // Add toggle functionality for suggestions
+  document.getElementById("toggleSuggestions").addEventListener("click", function() {
+    const suggestionsContainer = document.getElementById("suggestionsContainer");
+    const minimizeText = document.querySelector(".minimize-text");
+    const expandText = document.querySelector(".expand-text");
+    
+    suggestionsContainer.classList.toggle("hidden");
+    minimizeText.classList.toggle("hidden");
+    expandText.classList.toggle("hidden");
+    
+    // Adjust the height of the messages container when suggestions are hidden
+    if (suggestionsContainer.classList.contains("hidden")) {
+      chatMessages.style.height = "350px"; // More space for messages when suggestions are hidden
+    } else {
+      chatMessages.style.height = "300px"; // Default height when suggestions are visible
+    }
+    
+    // Scroll to the bottom of messages
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  });
+  
+  // Add event listeners for suggested questions
+  document.querySelectorAll(".suggestion-btn").forEach(btn => {
+    btn.addEventListener("click", function() {
+      chatInput.value = this.textContent;
+      sendMessage();
+    });
+  });
+  
+  // Main button styling and animation
+  chatbotButton.classList.add("pulse-animation");
+  
+  // Toggle chatbot window with animation
+  chatbotButton.addEventListener("click", function() {
+    chatbotWindow.classList.toggle("hidden");
+    if (!chatbotWindow.classList.contains("hidden")) {
+      chatbotWindow.classList.add("slide-in-animation");
+      setTimeout(() => {
+        chatbotWindow.classList.remove("slide-in-animation");
+      }, 500);
+    }
+  });
+  
+  closeChatbot.addEventListener("click", function() {
+    chatbotWindow.classList.add("slide-out-animation");
+    setTimeout(() => {
+      chatbotWindow.classList.add("hidden");
+      chatbotWindow.classList.remove("slide-out-animation");
+    }, 300);
+  });
+  
+  sendButton.addEventListener("click", sendMessage);
+  chatInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") sendMessage();
+  });
+  
+  // Show typing indicator when input has content
+  chatInput.addEventListener("input", function() {
+    if (this.value.trim().length > 0) {
+      sendButton.classList.add("active");
+    } else {
+      sendButton.classList.remove("active");
+    }
+  });
+  
+  // Store conversation context
+  let conversationContext = "You are a helpful assistant for SolarEco, specializing in solar panels. Respond to general greetings naturally. For questions about solar panels (efficiency, types, installation, costs, benefits, etc.), provide brief, informative answers. For questions unrelated to solar panels or greetings, politely redirect the conversation back to solar panels. Keep your answers concise but informative, around 2-3 sentences when possible.";
+  
+  async function sendMessage() {
+    const message = chatInput.value.trim();
+    if (message === "") return;
+    
+    addMessage(message, "user");
+    chatInput.value = "";
+    sendButton.classList.remove("active");
+    
+    // Show loading indicator
+    loadingIndicator.classList.remove("hidden");
+    
+    try {
+      // Update suggested questions based on current conversation
+      updateSuggestedQuestions(message);
+      
+      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyCBB76bgbgFQXn5mkKcM8Yn77Zkn47Nfqg', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `${conversationContext}\n\nUser: ${message}\n\nAssistant:`
+            }]
+          }]
+        })
+      });
+      
+      const data = await response.json();
+      
+      // Hide loading indicator
+      loadingIndicator.classList.add("hidden");
+      
+      if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
+        const botResponse = data.candidates[0].content.parts[0].text || 'Sorry, I couldn\'t process that. Please ask about solar panels.';
+        
+        // Update conversation context to include this exchange
+        conversationContext += `\n\nUser: ${message}\nAssistant: ${botResponse}`;
+        
+        // Keep context from getting too long
+        if (conversationContext.length > 4000) {
+          const contextParts = conversationContext.split("\n\n");
+          const systemPrompt = contextParts[0];
+          const recentExchanges = contextParts.slice(Math.max(contextParts.length - 5, 1));
+          conversationContext = [systemPrompt, ...recentExchanges].join("\n\n");
+        }
+        
+        // Add message with typing effect
+        addMessage(botResponse, "bot", true);
+      } else {
+        console.error("Invalid API response structure:", data);
+        loadingIndicator.classList.add("hidden");
+        addMessage('Sorry, I couldn\'t process that. Please ask about solar panels.', 'bot');
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+      loadingIndicator.classList.add("hidden");
+      addMessage('Error connecting to the server. Please try again later.', 'bot');
+    }
+  }
+  
+  function addMessage(text, sender, withTypingEffect = false) {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `message-bubble mb-3 p-3 rounded-lg max-w-xs ${sender === "user" ? "bg-blue-100 dark:bg-blue-900 ml-auto" : "bg-gray-100 dark:bg-gray-700 mr-auto"} fade-in`;
+    
+    if (sender === "bot" && withTypingEffect) {
+      // Start with empty text for typing effect
+      messageDiv.textContent = "";
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Apply typing effect
+      let i = 0;
+      const typingSpeed = 15; // milliseconds per character
+      const typeWriter = () => {
+        if (i < text.length) {
+          messageDiv.textContent += text.charAt(i);
+          i++;
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          setTimeout(typeWriter, typingSpeed);
+        }
+      };
+      typeWriter();
+    } else {
+      messageDiv.textContent = text;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  }
+  
+  function updateSuggestedQuestions(lastMessage) {
+    // Based on user's last message, suggest relevant follow-up questions
+    let newQuestions = [];
+    
+    if (lastMessage.toLowerCase().includes("panel") || lastMessage.toLowerCase().includes("solar")) {
+      if (lastMessage.toLowerCase().includes("type")) {
+        newQuestions = [
+          "Which solar panel is most efficient?",
+          "Cost difference between panel types?",
+          "Monocrystalline vs polycrystalline?",
+          "Best panels for home use?"
+        ];
+      } else if (lastMessage.toLowerCase().includes("efficien")) {
+        newQuestions = [
+          "How to improve solar efficiency?",
+          "Factors affecting panel efficiency",
+          "Maximum efficiency possible?",
+          "Efficiency in cloudy areas?"
+        ];
+      } else if (lastMessage.toLowerCase().includes("install")) {
+        newQuestions = [
+          "DIY installation possible?",
+          "Installation costs?",
+          "Best roof direction?",
+          "How many panels do I need?"
+        ];
+      } else {
+        newQuestions = [
+          "Solar panel maintenance",
+          "How long do panels last?",
+          "ROI on solar panels",
+          "Solar panel tax credits"
+        ];
+      }
+    } else {
+      // Default questions
+      newQuestions = [
+        "What are solar panels?",
+        "How efficient are solar panels?",
+        "Types of solar panels",
+        "Solar panel installation"
+      ];
+    }
+    
+    // Update the buttons
+    const suggestionBtns = document.querySelectorAll(".suggestion-btn");
+    for (let i = 0; i < Math.min(newQuestions.length, suggestionBtns.length); i++) {
+      suggestionBtns[i].textContent = newQuestions[i];
+    }
+  }
+  
+  // Add styles for animations, effects, and larger chat window
+  const styleElement = document.createElement("style");
+  styleElement.textContent = `
+    #chatbotWindow {
+      max-height: 80vh;
+      transition: width 0.3s ease, height 0.3s ease;
+    }
+    
+    #chatMessages {
+      transition: height 0.3s ease;
+      overflow-y: auto;
+    }
+    
+    .pulse-animation {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .slide-in-animation {
+      animation: slideIn 0.3s ease-out forwards;
+    }
+    
+    .slide-out-animation {
+      animation: slideOut 0.3s ease-in forwards;
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes slideOut {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(20px); opacity: 0; }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .loading-indicator {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    
+    .dot-pulse {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 40px;
+    }
+    
+    .dot-pulse__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #10B981;
+      animation: pulse-dot 1.5s infinite ease-in-out;
+    }
+    
+    .dot-pulse__dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .dot-pulse__dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes pulse-dot {
+      0%, 50%, 100% { transform: scale(1); opacity: 1; }
+      25%, 75% { transform: scale(1.5); opacity: 0.7; }
+    }
+    
+    .message-bubble {
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+    }
+    
+    .message-bubble:hover {
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+    
+    .suggested-questions {
+      transition: all 0.3s ease;
+    }
+    
+    .suggestion-btn {
+      transition: all 0.2s ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    
+    #suggestionsContainer {
+      transition: max-height 0.3s ease;
+      overflow-y: hidden;
+    }
+    
+    #toggleSuggestions {
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    
+    #sendMessage {
+      transition: all 0.3s ease;
+      opacity: 0.5;
+    }
+    
+    #sendMessage.active {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  `;
+  document.head.appendChild(styleElement);
+  
+  // Add a welcome message when the chatbot loads
+  setTimeout(() => {
+    addMessage("👋 Hello! I'm your SolarEco assistant. How can I help you today with solar panels?", "bot", true);
+  }, 500);
+});
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script>
+    // Firebase Initialization
+    const firebaseConfig = {
+      apiKey: "AIzaSyC2yo7FueekHoNKbCAwxWqeIgax0f-K84A",
+      authDomain: "solareco-6f1f4.firebaseapp.com",
+      projectId: "solareco-6f1f4",
+      appId: "1:647429122804:web:0eaf66c7842cf137bbcca1",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const authButton = document.getElementById("authBtn");
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        authButton.innerHTML = `
+          <button onclick="logout()" class="text-red-500 hover:underline">Logout</button>
+        `;
+        const greeting = document.getElementById('userGreeting');
+        const username = user.email.split('@')[0];
+        greeting.textContent = `Hi, ${username}`;
+        greeting.classList.remove('hidden');
+      } else {
+        authButton.innerHTML = `
+          <a href="/login" class="text-blue-600 hover:underline">Login</a>
+        `;
+        document.getElementById('userGreeting').classList.add('hidden');
+      }
+    });
+
+    function logout() {
+      auth.signOut().then(() => {
+        location.reload();
+      });
+    }
+    </script>
+</body>
+</html>
